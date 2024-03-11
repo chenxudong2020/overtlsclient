@@ -1,0 +1,100 @@
+  {
+  "experimental": {
+    "clash_api": {
+      "external_controller": "0.0.0.0:54322",
+      "external_ui": "/default/clash/dashboard/public",
+      "secret": ""
+    }
+  },
+  "log": {
+    "level": "info",
+    "timestamp": false
+  },
+  "inbounds": [
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "::",
+      "listen_port": 54323,
+	  "users": [
+ 
+	  ],
+      "set_system_proxy": false
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "block",
+      "tag": "block"
+    },
+    {
+      "type": "selector",
+      "tag": "proxy",
+      "outbounds": [
+        "overtls"
+      ],
+      "default": "overtls"
+    },
+    {
+      "type": "socks",
+      "tag": "overtls",
+      "server": "127.0.0.1",
+      "server_port": 1080,
+      "version": "5",
+      "username": "overtls",
+      "password": "overtls",
+      "network": "tcp",
+      "udp_over_tcp": {
+        "enabled": false,
+        "version": 2
+      }
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "geosite": "category-ads-all",
+        "outbound": "block"
+      },
+      {
+       "domain_suffix": [
+       	"bearteach.com"
+       	],
+       "outbound": "proxy"
+      },
+      {
+        "process_name": [
+		      "TencentMeeting",
+          "NemoDesktop",
+          "ToDesk",
+          "ToDesk_Service",
+          "WeChat",
+          "OpenLens",
+          "Tailscale",
+          "wireguard-go",
+          "Tunnelblick",
+          "softwareupdated",
+          "kubectl"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "geosite": "cn",
+        "geoip": [
+          "cn",
+          "private"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "geosite": "geolocation-!cn",
+        "geoip": "!cn",
+        "outbound": "proxy"
+      }
+    ]
+  }
+}

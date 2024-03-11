@@ -1,0 +1,15 @@
+    {
+        "remarks": "bCgc",
+        "method": "none",
+        "password": "password",
+        "tunnel_path": "/user/",
+        "client_settings": {
+            "server_host": "**********",
+            "server_port": 443,
+            "server_domain": "*************",
+            "listen_user": "overtls",
+            "listen_password": "overtls",
+            "listen_host": "127.0.0.1",
+            "listen_port": 1080
+          } 
+      }     
