@@ -49,7 +49,7 @@ initovertlsconfig(){
         "remarks": "${identity}",
         "method": "none",
         "password": "password",
-        "tunnel_path": "${TUNNEL_PATH}",
+        "tunnel_path": $(gettunnelpath),
         "client_settings": {
             "server_host": "${SERVER_HOST}",
             "server_port": ${SERVER_PORT},
@@ -61,6 +61,28 @@ initovertlsconfig(){
           } 
       }     
 EOF
+}
+
+
+gettunnelpath(){
+    TUNNEL_PATH_STRING="$TUNNEL_PATH"   
+    TUNNEL_PATH_STRING="${TUNNEL_PATH_STRING#,}"  
+    TUNNEL_PATH_STRING="${TUNNEL_PATH_STRING%,}"  
+    NEW_TUNNEL_PATH=""  
+    OLD_IFS="$IFS"
+    IFS=','  
+    for item in $TUNNEL_PATH_STRING; do  
+        item="${item#"${item%%[![:space:]]*}"}"  
+        item="${item%"${item##*[![:space:]]}"}" 
+        if [ -n "$NEW_TUNNEL_PATH" ]; then  
+            NEW_TUNNEL_PATH="$NEW_TUNNEL_PATH,\"$item\""  
+        else  
+            NEW_TUNNEL_PATH="\"$item\""  
+        fi  
+    done  
+    IFS="$OLD_IFS"
+    NEW_TUNNEL_PATH="[${NEW_TUNNEL_PATH}]"  
+    echo $NEW_TUNNEL_PATH
 }
 
 
